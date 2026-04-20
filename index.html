@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Konfigurator Kamera</title>
+
+<style>
+body { font-family: Arial; max-width: 500px; margin:auto; padding:15px;}
+.step { display:none; border:1px solid #ddd; padding:15px; border-radius:10px;}
+.step.active { display:block;}
+select,input { width:100%; padding:12px; margin-top:10px; font-size:16px;}
+.nav { display:flex; gap:10px; margin-top:15px;}
+button { flex:1; padding:14px; border:none; background:black; color:white; font-size:16px;}
+.quickBtns { display:flex; gap:10px; margin-top:10px;}
+.quickBtns button { flex:1; background:#eee; color:black; font-weight:bold;}
+.sliderValue { text-align:center; font-size:18px; margin-top:5px; font-weight:bold;}
+.summaryBox {
+  margin-top:15px;
+  border:1px solid #ddd;
+  border-radius:12px;
+  padding:15px;
+  background:#fafafa;
+}
+.summaryTitle { font-size:18px; font-weight:700; margin-bottom:10px;}
+.item {
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px dashed #ddd;
+  font-size:14px;
+}
+.item:last-child { border-bottom:none; }
+.totalBox {
+  margin-top:12px;
+  padding-top:10px;
+  border-top:2px solid #000;
+  display:flex;
+  justify-content:space-between;
+  font-size:20px;
+  font-weight:800;
+  color:green;
+}
+button.ready { background: green !important; }
+.shareBox{ display:none; margin-top:15px;}
+.shareBox button{ width:100%; margin-top:10px;}
+</style>
+</head>
+
+<body>
+
+<h2>Konfigurator Kamera</h2>
+
+<div class="step active" id="step1">
+<h3>Kamera</h3>
+
+<select id="cameraType">
+<option value="">Zgjidh (5MP / 8MP)</option>
+<option value="5mp">5MP</option>
+<option value="8mp">8MP</option>
+</select>
+
+<div class="quickBtns">
+<button onclick="setCamera(4)">4</button>
+<button onclick="setCamera(8)">8</button>
+<button onclick="setCamera(16)">16</button>
+</div>
+
+<input type="range" id="cameraQty" min="0" max="16" value="0" disabled>
+<div class="sliderValue" id="sliderVal">0 Kamera</div>
+</div>
+
+<div class="step" id="step2">
+<h3>DVR</h3>
+<select id="dvrType"></select>
+<select id="dvrModel"></select>
+</div>
+
+<div class="step" id="step3">
+<h3>HDD</h3>
+<select id="hdd">
+<option value="">Zgjidh HDD</option>
+<option value="500">500GB</option>
+<option value="1tb">1TB</option>
+<option value="2tb">2TB</option>
+<option value="4tb">4TB</option>
+<option value="6tb">6TB</option>
+</select>
+</div>
+
+<div class="step" id="step4">
+<h3>Kabull (metra)</h3>
+<input type="range" id="cable" min="0" max="120" value="0">
+<div class="sliderValue" id="cableVal">0 m</div>
+</div>
+
+<div class="step" id="step5">
+<h3>Ushqyes</h3>
+<select id="power"></select>
+</div>
+
+<div class="step" id="step6">
+<h3>Ploteso Informacionin</h3>
+<input id="name" placeholder="Emri">
+<input id="phone" placeholder="Nr telefoni">
+<input id="address" placeholder="Adresa">
+</div>
+
+<div class="nav">
+<button onclick="prevStep()">Mbrapa</button>
+<button onclick="nextStep()" id="nextBtn">Vazhdo</button>
+</div>
+
+<div class="shareBox" id="shareBox">
+<button onclick="sendWhatsApp()">WhatsApp</button>
+<button onclick="sendSMS()">SMS</button>
+</div>
+
+<div class="summaryBox">
+<div class="summaryTitle">Porosia</div>
+<div id="summary"></div>
+<div id="total"></div>
+</div>
+
+<script>
+
+let step = 1;
+const phoneNumber = "355696669555";
+
+const prices = {
+camera: {"5mp":50,"8mp":80},
+dvr: {
+  "5mp":{"4":100,"8":200,"16":350},
+  "8mp":{"4":100,"8":200,"16":350}
+},
+hdd: {"500":50,"1tb":100,"2tb":150,"4tb":200,"6tb":250},
+power: {"5a":2,"10a":60,"20a":140},
+cable:0.5
+};
+
+const cameraType = document.getElementById("cameraType");
+const cameraQty = document.getElementById("cameraQty");
+const sliderVal = document.getElementById("sliderVal");
+const cable = document.getElementById("cable");
+const cableVal = document.getElementById("cableVal");
+const dvrType = document.getElementById("dvrType");
+const dvrModel = document.getElementById("dvrModel");
+const nextBtn = document.getElementById("nextBtn");
+
+cameraType.addEventListener("change", ()=>{
+  cameraQty.disabled = !cameraType.value;
+  if(!cameraType.value){
+    cameraQty.value = 0;
+    sliderVal.innerText = "0 Kamera";
+  }
+  updateAll();
+});
+
+function showStep(){
+  document.querySelectorAll(".step").forEach(s=>s.classList.remove("active"));
+  document.getElementById("step"+step).classList.add("active");
+  nextBtn.innerText = step===6 ? "Dergo Preventivin" : "Vazhdo";
+}
+
+function canGoNext(){
+  if(step===1) return cameraType.value && parseInt(cameraQty.value)>0;
+  if(step===2) return dvrType.value && dvrModel.value;
+  if(step===3) return document.getElementById("hdd").value;
+  if(step===5) return document.getElementById("power").value;
+  return true;
+}
+
+function nextStep(){
+  if(!canGoNext()){
+    alert("Zgjidh të gjitha opsionet përpara se të vazhdosh.");
+    return;
+  }
+
+  if(step<6){
+    step++;
+    showStep();
+  } else {
+    document.getElementById("shareBox").style.display = "block";
+    updateUIState();
+  }
+}
+
+function prevStep(){
+  if(step>1){
+    step--;
+    showStep();
+  }
+  document.getElementById("shareBox").style.display = "none";
+  nextBtn.classList.remove("ready");
+}
+
+function setCamera(val){
+  if(!cameraType.value) return;
+  cameraQty.value = val;
+  sliderVal.innerText = val + " Kamera";
+  updateAll();
+}
+
+function syncDVRType(){
+  let cam = cameraType.value;
+  let prev = dvrType.value;
+
+  dvrType.innerHTML = '<option value="">Zgjidh cilësinë</option>';
+
+  if(cam==="5mp"){
+    dvrType.innerHTML += `<option value="5mp">5MP</option>`;
+    dvrType.innerHTML += `<option value="8mp">8MP</option>`;
+  }
+  if(cam==="8mp"){
+    dvrType.innerHTML += `<option value="8mp">8MP</option>`;
+  }
+
+  dvrType.value = dvrType.querySelector(`option[value="${prev}"]`) ? prev : "";
+}
+
+function updateDVR(){
+  let qty = parseInt(cameraQty.value)||0;
+  let prev = dvrModel.value;
+
+  dvrModel.innerHTML = '<option value="">Zgjidh DVR</option>';
+
+  let allowed=[];
+  if(qty<=4) allowed=["4","8","16"];
+  else if(qty<=8) allowed=["8","16"];
+  else allowed=["16"];
+
+  allowed.forEach(k=>{
+    let o=document.createElement("option");
+    o.value=k;
+    o.textContent=k+" Kanale";
+    dvrModel.appendChild(o);
+  });
+
+  if(allowed.includes(prev)) dvrModel.value=prev;
+}
+
+function updateCable(){
+  cableVal.innerText = cable.value + " m";
+}
+
+function syncPower(){
+  let qty = parseInt(cameraQty.value) || 0;
+  let c = parseInt(cable.value) || 0;
+  let p = document.getElementById("power");
+  let prev = p.value;
+
+  p.innerHTML = '<option value="">Zgjidh Ushqyes</option>';
+
+  let allowed = [];
+
+  if(qty <= 6) allowed = ["5a","10a","20a"];
+  else if(qty <= 10) allowed = ["10a","20a"];
+  else allowed = ["20a"];
+
+  if(c > 80) allowed = allowed.filter(x => x !== "5a");
+
+  if(allowed.includes("5a")) p.innerHTML += `<option value="5a">5A</option>`;
+  if(allowed.includes("10a")) p.innerHTML += `<option value="10a">10A</option>`;
+  if(allowed.includes("20a")) p.innerHTML += `<option value="20a">20A</option>`;
+
+  p.value = p.querySelector(`option[value="${prev}"]`) ? prev : "";
+}
+
+function updateSummary(){
+  let html = "";
+  let total = 0;
+
+  const camLabel = {"5mp":"5MP","8mp":"8MP"};
+  const powerLabel = {"5a":"5A","10a":"10A","20a":"20A"};
+  const dvrLabel = {"4":"4 Kanale","8":"8 Kanale","16":"16 Kanale"};
+  const hddLabel = {"500":"500GB","1tb":"1TB","2tb":"2TB","4tb":"4TB","6tb":"6TB"};
+
+  let cam = cameraType.value;
+  let qty = parseInt(cameraQty.value) || 0;
+
+  if(cam && qty){
+    let sub = prices.camera[cam] * qty;
+    html += `<div class="item"><div>${qty} Kamera (${camLabel[cam]})</div><div>${sub} €</div></div>`;
+    total += sub;
+  }
+
+  let dvr = dvrModel.value;
+  if(dvrType.value && dvr){
+    let sub = prices.dvr[dvrType.value][dvr];
+    html += `<div class="item"><div>DVR ${dvrLabel[dvr]}</div><div>${sub} €</div></div>`;
+    total += sub;
+  }
+
+  let h = document.getElementById("hdd").value;
+  if(h){
+    let sub = prices.hdd[h];
+    html += `<div class="item"><div>HDD ${hddLabel[h]}</div><div>${sub} €</div></div>`;
+    total += sub;
+  }
+
+  let c = parseInt(cable.value)||0;
+  if(c){
+    let sub = c * prices.cable;
+    html += `<div class="item"><div>Kabull ${c}m</div><div>${sub.toFixed(2)} €</div></div>`;
+    total += sub;
+  }
+
+  let p = document.getElementById("power").value;
+  if(p){
+    let sub = prices.power[p];
+    html += `<div class="item"><div>Ushqyes (${powerLabel[p]})</div><div>${sub} €</div></div>`;
+    total += sub;
+  }
+
+  document.getElementById("summary").innerHTML = html;
+  document.getElementById("total").innerHTML =
+    `<div class="totalBox"><div>Total</div><div>${total.toFixed(2)} €</div></div>`;
+}
+
+function updateUIState(){
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+
+  if(step === 6 && name && phone && address){
+    nextBtn.classList.add("ready");
+  } else {
+    nextBtn.classList.remove("ready");
+  }
+
+  let share = document.getElementById("shareBox");
+  if(share.style.display === "block"){
+    share.querySelectorAll("button").forEach(b=> b.classList.add("ready"));
+  }
+}
+
+function buildMessage(){
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let address = document.getElementById("address").value;
+
+  let summaryText = document.getElementById("summary").innerText;
+  let totalText = document.getElementById("total").innerText;
+
+  return `POROSI E RE
+
+--------------------
+${summaryText}
+
+${totalText}
+--------------------
+
+EMRI: ${name}
+TEL: ${phone}
+ADRESA: ${address}`;
+}
+
+function sendWhatsApp(){
+  let msg = buildMessage();
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+function sendSMS(){
+  let msg = buildMessage();
+  window.open(`sms:+${phoneNumber}?body=${encodeURIComponent(msg)}`);
+}
+
+function updateAll(){
+  syncDVRType();
+  updateDVR();
+  syncPower();
+  updateCable();
+  updateSummary();
+  updateUIState();
+}
+
+document.querySelectorAll("select,input").forEach(el=>{
+  el.addEventListener("input", ()=>{
+    if(el.id==="cameraQty") sliderVal.innerText = el.value + " Kamera";
+    if(el.id==="cable") updateCable();
+    updateAll();
+  });
+});
+
+showStep();
+
+</script>
+
+</body>
+</html>
