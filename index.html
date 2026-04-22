@@ -3,67 +3,140 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kamera Sigurie APP</title>
+<title>Personalizo Oferten</title>
 
 <style>
-body { font-family: Arial; max-width: 500px; margin:auto; padding:15px;}
-.step { display:none; border:1px solid #ddd; padding:15px; border-radius:10px;}
-.step.active { display:block;}
-select,input { width:100%; padding:12px; margin-top:10px; font-size:16px;}
-.nav { display:flex; gap:10px; margin-top:15px;}
-button { flex:1; padding:14px; border:none; background:black; color:white; font-size:16px;}
 
-.quickBtns { display:flex; gap:10px; margin-top:10px;}
-.quickBtns button { flex:1; background:#eee; color:black; font-weight:bold; cursor:pointer;}
+/* 🔵 BACKGROUND + TEXT */
+body {
+  font-family: Arial;
+  max-width: 500px;
+  margin: auto;
+  padding: 15px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: #e2e8f0;
+}
 
-.sliderValue { text-align:center; font-size:18px; margin-top:5px; font-weight:bold;}
+/* 🔵 STEPS */
+.step {
+  display: none;
+  border: 1px solid #334155;
+  padding: 15px;
+  border-radius: 10px;
+  background: #1e293b;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.step.active { display: block; }
 
+/* 🔵 INPUTS */
+select,input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  font-size: 16px;
+  background: #0f172a;
+  color: #e2e8f0;
+  border: 1px solid #334155;
+  border-radius: 8px;
+}
+
+/* 🔵 NAV */
+.nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+/* 🔵 BUTTONS */
+button {
+  flex: 1;
+  padding: 14px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* 🔵 QUICK BUTTONS */
+.quickBtns {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.quickBtns button {
+  flex: 1;
+  background: #334155;
+  color: #e2e8f0;
+  font-weight: bold;
+}
+
+/* 🔵 SLIDER TEXT */
+.sliderValue {
+  text-align: center;
+  font-size: 18px;
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+/* 🔵 SUMMARY */
 .summaryBox {
-  margin-top:15px;
-  border:1px solid #ddd;
-  border-radius:12px;
-  padding:15px;
-  background:#fafafa;
+  margin-top: 15px;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 15px;
+  background: #0f172a;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
-.summaryTitle { font-size:18px; font-weight:700; margin-bottom:10px;}
-.item {
-  display:flex;
-  justify-content:space-between;
-  padding:8px 0;
-  border-bottom:1px dashed #ddd;
-  font-size:14px;
+.summaryTitle {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
 }
-.item:last-child { border-bottom:none; }
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px dashed #334155;
+  font-size: 14px;
+}
+
+.item:last-child { border-bottom: none; }
 
 .totalBox {
-  margin-top:12px;
-  padding-top:10px;
-  border-top:2px solid #000;
-  display:flex;
-  justify-content:space-between;
-  font-size:20px;
-  font-weight:800;
-  color:green;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px solid #2563eb;
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: 800;
+  color: #22c55e;
 }
 
-button.ready { background: green !important; }
+button.ready { background: #16a34a !important; }
 
-/* 🔥 FIX: WhatsApp + SMS butonat */
-.shareBox{ display:none; margin-top:15px;}
-.shareBox button{
-  width:100%;
-  margin-top:10px;
-  background: green;
+/* 🔵 SHARE */
+.shareBox { display: none; margin-top: 15px; }
+
+.shareBox button {
+  width: 100%;
+  margin-top: 10px;
+  background: #16a34a;
   color: white;
   font-weight: bold;
 }
+
 </style>
 </head>
 
 <body>
 
-<h2>Personalizo Oferten</h2>
+<h2>Kamera Sigurie APP</h2>
 
 <div class="step active" id="step1">
 <h3>Kamera</h3>
@@ -106,13 +179,12 @@ button.ready { background: green !important; }
 <h3>Kabull (metra)</h3>
 
 <div class="quickBtns">
-  <button onclick="setCable(40)">40M</button>
-  <button onclick="setCable(80)">80M</button>
-  <button onclick="setCable(120)">120M</button>
+<button onclick="setCable(40)">40M</button>
+<button onclick="setCable(80)">80M</button>
+<button onclick="setCable(120)">120M</button>
 </div>
 
 <input type="range" id="cable" min="0" max="120" value="0">
-
 <div class="sliderValue" id="cableVal">0 m</div>
 </div>
 
@@ -146,7 +218,7 @@ button.ready { background: green !important; }
 
 <script>
 
-/* --- JAVASCRIPT PA NDRYSHIME LOGJIKE --- */
+/* --- JAVASCRIPT (PA PREKUR) --- */
 
 let step = 1;
 const phoneNumber = "355696669555";
