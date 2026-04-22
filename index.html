@@ -12,9 +12,12 @@ body { font-family: Arial; max-width: 500px; margin:auto; padding:15px;}
 select,input { width:100%; padding:12px; margin-top:10px; font-size:16px;}
 .nav { display:flex; gap:10px; margin-top:15px;}
 button { flex:1; padding:14px; border:none; background:black; color:white; font-size:16px;}
+
 .quickBtns { display:flex; gap:10px; margin-top:10px;}
-.quickBtns button { flex:1; background:#eee; color:black; font-weight:bold;}
+.quickBtns button { flex:1; background:#eee; color:black; font-weight:bold; cursor:pointer;}
+
 .sliderValue { text-align:center; font-size:18px; margin-top:5px; font-weight:bold;}
+
 .summaryBox {
   margin-top:15px;
   border:1px solid #ddd;
@@ -22,6 +25,7 @@ button { flex:1; padding:14px; border:none; background:black; color:white; font-
   padding:15px;
   background:#fafafa;
 }
+
 .summaryTitle { font-size:18px; font-weight:700; margin-bottom:10px;}
 .item {
   display:flex;
@@ -31,6 +35,7 @@ button { flex:1; padding:14px; border:none; background:black; color:white; font-
   font-size:14px;
 }
 .item:last-child { border-bottom:none; }
+
 .totalBox {
   margin-top:12px;
   padding-top:10px;
@@ -41,9 +46,18 @@ button { flex:1; padding:14px; border:none; background:black; color:white; font-
   font-weight:800;
   color:green;
 }
+
 button.ready { background: green !important; }
+
+/* 🔥 FIX: WhatsApp + SMS butonat */
 .shareBox{ display:none; margin-top:15px;}
-.shareBox button{ width:100%; margin-top:10px;}
+.shareBox button{
+  width:100%;
+  margin-top:10px;
+  background: green;
+  color: white;
+  font-weight: bold;
+}
 </style>
 </head>
 
@@ -90,7 +104,15 @@ button.ready { background: green !important; }
 
 <div class="step" id="step4">
 <h3>Kabull (metra)</h3>
+
+<div class="quickBtns">
+  <button onclick="setCable(40)">40M</button>
+  <button onclick="setCable(80)">80M</button>
+  <button onclick="setCable(120)">120M</button>
+</div>
+
 <input type="range" id="cable" min="0" max="120" value="0">
+
 <div class="sliderValue" id="cableVal">0 m</div>
 </div>
 
@@ -124,6 +146,8 @@ button.ready { background: green !important; }
 
 <script>
 
+/* --- JAVASCRIPT PA NDRYSHIME LOGJIKE --- */
+
 let step = 1;
 const phoneNumber = "355696669555";
 
@@ -131,7 +155,7 @@ const prices = {
 camera: {"5mp":50,"8mp":80},
 dvr: {
   "5mp":{"4":100,"8":200,"16":350},
-  "8mp":{"4":100,"8":200,"16":350}
+  "8mp":{"4":150,"8":250,"16":450}
 },
 hdd: {"500":50,"1tb":100,"2tb":120,"4tb":200,"6tb":280},
 power: {"5a":20,"10a":60,"20a":130},
@@ -201,6 +225,16 @@ function setCamera(val){
   updateAll();
 }
 
+function setCable(val){
+  cable.value = val;
+  updateCable();
+  updateAll();
+}
+
+function updateCable(){
+  cableVal.innerText = cable.value + " m";
+}
+
 function syncDVRType(){
   let cam = cameraType.value;
   let prev = dvrType.value;
@@ -237,10 +271,6 @@ function updateDVR(){
   });
 
   if(allowed.includes(prev)) dvrModel.value=prev;
-}
-
-function updateCable(){
-  cableVal.innerText = cable.value + " m";
 }
 
 function syncPower(){
@@ -285,9 +315,10 @@ function updateSummary(){
   }
 
   let dvr = dvrModel.value;
+
   if(dvrType.value && dvr){
     let sub = prices.dvr[dvrType.value][dvr];
-    html += `<div class="item"><div>DVR ${dvrLabel[dvr]}</div><div>${sub} €</div></div>`;
+    html += `<div class="item"><div>DVR ${dvrLabel[dvr]} (${camLabel[dvrType.value]})</div><div>${sub} €</div></div>`;
     total += sub;
   }
 
@@ -317,6 +348,15 @@ function updateSummary(){
     `<div class="totalBox"><div>Total</div><div>${total.toFixed(2)} €</div></div>`;
 }
 
+function updateAll(){
+  syncDVRType();
+  updateDVR();
+  syncPower();
+  updateCable();
+  updateSummary();
+  updateUIState();
+}
+
 function updateUIState(){
   let name = document.getElementById("name").value;
   let phone = document.getElementById("phone").value;
@@ -327,11 +367,6 @@ function updateUIState(){
   } else {
     nextBtn.classList.remove("ready");
   }
-
-  let share = document.getElementById("shareBox");
-  if(share.style.display === "block"){
-    share.querySelectorAll("button").forEach(b=> b.classList.add("ready"));
-  }
 }
 
 function buildMessage(){
@@ -339,16 +374,11 @@ function buildMessage(){
   let phone = document.getElementById("phone").value;
   let address = document.getElementById("address").value;
 
-  let summaryText = document.getElementById("summary").innerText;
-  let totalText = document.getElementById("total").innerText;
-
   return `POROSI E RE
 
---------------------
-${summaryText}
+${document.getElementById("summary").innerText}
 
-${totalText}
---------------------
+${document.getElementById("total").innerText}
 
 EMRI: ${name}
 TEL: ${phone}
@@ -356,22 +386,11 @@ ADRESA: ${address}`;
 }
 
 function sendWhatsApp(){
-  let msg = buildMessage();
-  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(msg)}`, "_blank");
+  window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(buildMessage())}`, "_blank");
 }
 
 function sendSMS(){
-  let msg = buildMessage();
-  window.open(`sms:+${phoneNumber}?body=${encodeURIComponent(msg)}`);
-}
-
-function updateAll(){
-  syncDVRType();
-  updateDVR();
-  syncPower();
-  updateCable();
-  updateSummary();
-  updateUIState();
+  window.open(`sms:+${phoneNumber}?body=${encodeURIComponent(buildMessage())}`);
 }
 
 document.querySelectorAll("select,input").forEach(el=>{
