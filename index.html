@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sete Kamera</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin: 0;
+  padding: 15px;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+}
+
+h2 { margin-bottom: 10px; }
+
+.category {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.category button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  background: #1e293b;
+  color: white;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.category button.active {
+  background: #2563eb;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.card img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  background: #0f172a;
+}
+
+@media (max-width: 600px) {
+  .card img {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* TITLE + PRICE IN ONE LINE */
+.infoRow {
+  margin-top: 10px;
+  padding: 0 10px;
+  font-size: 16px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.price {
+  color: #22c55e;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.nav {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.nav button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #334155;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ORDER BUTTONS */
+.btnRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.smallBtn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.whatsappBtn {
+  background: #16a34a;
+}
+
+.smsBtn {
+  background: #2563eb;
+}
+
+/* PERSONALIZE */
+.customBtn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 14px;
+  background: #f59e0b;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  color: black;
+}
+
+.smallText {
+  font-size: 12px;
+  margin-top: 6px;
+  color: #cbd5e1;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Zgjidh Paketën</h2>
+
+<div class="category">
+  <button onclick="setCategory('5mp')" id="btn5">SET 5MP</button>
+  <button onclick="setCategory('8mp')" id="btn8">SET 8MP</button>
+</div>
+
+<div class="card">
+  <img id="img">
+
+  <div class="infoRow">
+    <div id="title"></div>
+    <div id="price" class="price"></div>
+  </div>
+</div>
+
+<div class="nav">
+  <button onclick="prev()">⬅️ Mbrapa</button>
+  <button onclick="next()">➡️ Next</button>
+</div>
+
+<div class="btnRow">
+  <button class="smallBtn whatsappBtn" onclick="orderWhatsApp()">WhatsApp</button>
+  <button class="smallBtn smsBtn" onclick="orderSMS()">SMS</button>
+</div>
+
+<a href="https://www.kamerasigurie.com/personalizo.html" style="text-decoration:none;">
+  <button class="customBtn">Personalizo Oferten</button>
+</a>
+
+<div class="smallText">
+  Sa kushton Sistemi i Kamerave? Llogarite tani ...
+</div>
+
+<script>
+const phone = "355696669555";
+
+const data = {
+  "5mp": [
+    {img:"https://i.ibb.co/FqWVxZ7L/2cop.png", name:"Set 2 Kamera 5MP", price:"€280"},
+    {img:"https://i.ibb.co/1GsjZ238/3cop.png", name:"Set 3 Kamera 5MP", price:"€350"},
+    {img:"https://i.ibb.co/TDg47wFf/4cop.png", name:"Set 4 Kamera 5MP", price:"€390"},
+    {img:"https://i.ibb.co/S7cjnncX/5cop.png", name:"Set 5 Kamera 5MP", price:"€530"},
+    {img:"https://i.ibb.co/0p8dbk13/6cop.png", name:"Set 6 Kamera 5MP", price:"€610"},
+    {img:"https://i.ibb.co/v61knZ2C/7cop.png", name:"Set 7 Kamera 5MP", price:"€680"},
+    {img:"https://i.ibb.co/JFQTbLk9/8cop.png", name:"Set 8 Kamera 5MP", price:"€790"}
+  ],
+
+  "8mp": [
+    {img:"https://i.ibb.co/Y4gmhbjV/4K-2cam.png", name:"Set 2 Kamera 8MP", price:"€430"},
+    {img:"https://i.ibb.co/tPC6GNVb/4K-3cam.png", name:"Set 3 Kamera 8MP", price:"€490"},
+    {img:"https://i.ibb.co/mCddkSjv/4cop-4k.png", name:"Set 4 Kamera 8MP", price:"€550"},
+    {img:"https://i.ibb.co/ZzH3RJTY/5cop-4k.png", name:"Set 5 Kamera 8MP", price:"€690"},
+    {img:"https://i.ibb.co/pvTQq4qt/6cop-4k.png", name:"Set 6 Kamera 8MP", price:"€780"},
+    {img:"https://i.ibb.co/d4wpcry5/7cop-4k.png", name:"Set 7 Kamera 8MP", price:"€870"},
+    {img:"https://i.ibb.co/21FnnDgD/8cop-4k.png", name:"Set 8 Kamera 8MP", price:"€960"}
+  ]
+};
+
+let category = "5mp";
+let index = 0;
+
+function setCategory(cat){
+  category = cat;
+  index = 0;
+
+  document.getElementById("btn5").classList.remove("active");
+  document.getElementById("btn8").classList.remove("active");
+  document.getElementById(cat==="5mp"?"btn5":"btn8").classList.add("active");
+
+  render();
+}
+
+function render(){
+  let item = data[category][index];
+  document.getElementById("img").src = item.img;
+  document.getElementById("title").innerText = item.name;
+  document.getElementById("price").innerText = item.price;
+}
+
+function next(){
+  if(index < data[category].length-1){
+    index++;
+    render();
+  }
+}
+
+function prev(){
+  if(index > 0){
+    index--;
+    render();
+  }
+}
+
+function buildMessage(item){
+  return `Kerkese oferte
+
+Produkti: ${item.name}
+Cmimi: ${item.price}
+Linku i fotos: ${item.img}
+
+Jam i interesuar per setin ne oferte.`;
+}
+
+function orderWhatsApp(){
+  let item = data[category][index];
+  let msg = buildMessage(item);
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+}
+
+function orderSMS(){
+  let item = data[category][index];
+  let msg = buildMessage(item);
+  window.open(`sms:+${phone}?body=${encodeURIComponent(msg)}`);
+}
+
+setCategory("5mp");
+</script>
+
+</body>
+</html>
