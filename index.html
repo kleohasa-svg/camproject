@@ -10,14 +10,9 @@
 
   gtag('config', 'AW-18082508257');
 </script>
-<!-- Event snippet for Purchase conversion page -->
-<script>
-  gtag('event', 'conversion', {
-      'send_to': 'AW-18082508257/ghHACLXY7Z0cEOHbtK5D',
-      'transaction_id': ''
-      // 'new_customer': true /* calculate dynamically, populate with true/false */,
-  });
-</script>
+
+<!-- Event snippet (REMOVED from page load to avoid false conversions) -->
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sete Kamera</title>
@@ -32,30 +27,16 @@ body {
   text-align: center;
 }
 
-/* CONTAINER */
-.container {
-  width: 100%;
-}
+.container { width: 100%; }
 
-/* DESKTOP VERSION */
 @media (min-width: 900px) {
-  body {
-    display: flex;
-    justify-content: center;
-  }
-
-  .container {
-    max-width: 620px; /* 🔥 më i gjerë */
-  }
-
-  .card img {
-    max-height: 380px; /* 🔥 më i madh por i kontrolluar */
-  }
+  body { display: flex; justify-content: center; }
+  .container { max-width: 620px; }
+  .card img { max-height: 380px; }
 }
 
 h2 { margin-bottom: 10px; }
 
-/* CATEGORY */
 .category {
   display: flex;
   gap: 10px;
@@ -73,11 +54,8 @@ h2 { margin-bottom: 10px; }
   cursor: pointer;
 }
 
-.category button.active {
-  background: #2563eb;
-}
+.category button.active { background: #2563eb; }
 
-/* CARD */
 .card {
   background: #1e293b;
   border-radius: 14px;
@@ -89,13 +67,10 @@ h2 { margin-bottom: 10px; }
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  display: block;
 }
 
 @media (max-width: 600px) {
-  .card img {
-    aspect-ratio: 1 / 1;
-  }
+  .card img { aspect-ratio: 1 / 1; }
 }
 
 .infoRow {
@@ -106,17 +81,12 @@ h2 { margin-bottom: 10px; }
   display: flex;
   justify-content: center;
   gap: 10px;
-  align-items: center;
   flex-wrap: wrap;
 }
 
-.price {
-  color: #22c55e;
-  font-size: 18px;
-}
+.price { color: #22c55e; font-size: 18px; }
 
-/* NAV */
-.nav, .btnRow {
+.nav {
   display: flex;
   gap: 10px;
   margin-top: 10px;
@@ -134,7 +104,6 @@ h2 { margin-bottom: 10px; }
   background: #334155;
 }
 
-/* SEND BUTTON */
 .sendBtn {
   width: 100%;
   margin-top: 10px;
@@ -148,12 +117,8 @@ h2 { margin-bottom: 10px; }
   background: #2563eb;
 }
 
-/* HIDDEN */
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
-/* WHATSAPP + SMS */
 .whatsappBtn,
 .smsBtn {
   flex: 1;
@@ -165,15 +130,11 @@ h2 { margin-bottom: 10px; }
   font-size: 13px;
   height: 40px;
   background: #334155;
-  transition: 0.2s;
 }
 
 .whatsappBtn.active,
-.smsBtn.active {
-  background: #16a34a;
-}
+.smsBtn.active { background: #16a34a; }
 
-/* PERSONALIZO PREMIUM */
 .customBtn {
   margin-top: 10px;
   width: 100%;
@@ -184,39 +145,7 @@ h2 { margin-bottom: 10px; }
   font-weight: 700;
   cursor: pointer;
   color: #111;
-
   background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
-  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
-
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.customBtn:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
-}
-
-.customBtn:active {
-  transform: translateY(0px) scale(0.99);
-  box-shadow: 0 8px 18px rgba(245, 158, 11, 0.3);
-}
-
-.customBtn::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 40%;
-  height: 200%;
-  background: rgba(255,255,255,0.25);
-  transform: rotate(25deg);
-  transition: all 0.6s ease;
-}
-
-.customBtn:hover::after {
-  left: 120%;
 }
 
 .smallText {
@@ -255,7 +184,7 @@ h2 { margin-bottom: 10px; }
   📦 Dergo Porosin
 </button>
 
-<div id="sendOptions" class="btnRow hidden">
+<div id="sendOptions" class="nav hidden">
   <button class="whatsappBtn" onclick="orderWhatsApp()">WhatsApp</button>
   <button class="smsBtn" onclick="orderSMS()">SMS</button>
 </div>
@@ -306,9 +235,8 @@ function render(){
 
 function setCategory(cat){
   category = cat;
-  document.getElementById("btn5").classList.remove("active");
-  document.getElementById("btn8").classList.remove("active");
-  document.getElementById(cat==="5mp"?"btn5":"btn8").classList.add("active");
+  document.getElementById("btn5").classList.toggle("active", cat==="5mp");
+  document.getElementById("btn8").classList.toggle("active", cat==="8mp");
   render();
 }
 
@@ -332,6 +260,11 @@ function showSendOptions(){
 
   document.querySelector(".whatsappBtn").classList.add("active");
   document.querySelector(".smsBtn").classList.add("active");
+
+  // 🔥 REAL CONVERSION HERE
+  gtag('event', 'conversion', {
+    'send_to': 'AW-18082508257/ghHACLXY7Z0cEOHbtK5D'
+  });
 }
 
 function buildMessage(item){
