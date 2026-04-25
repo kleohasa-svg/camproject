@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sete Kamera</title>
+<title>Kamerasigurie.com</title>
 
 <style>
 body {
@@ -13,6 +13,27 @@ body {
   background: #0f172a;
   color: white;
   text-align: center;
+}
+
+/* CONTAINER */
+.container {
+  width: 100%;
+}
+
+/* DESKTOP VERSION */
+@media (min-width: 900px) {
+  body {
+    display: flex;
+    justify-content: center;
+  }
+
+  .container {
+    max-width: 620px; /* 🔥 më i gjerë */
+  }
+
+  .card img {
+    max-height: 380px; /* 🔥 më i madh por i kontrolluar */
+  }
 }
 
 h2 { margin-bottom: 10px; }
@@ -191,6 +212,8 @@ h2 { margin-bottom: 10px; }
 
 <body>
 
+<div class="container">
+
 <h2>Zgjidh Paketën</h2>
 
 <div class="category">
@@ -212,7 +235,7 @@ h2 { margin-bottom: 10px; }
 </div>
 
 <button id="sendBtn" class="sendBtn" onclick="showSendOptions()">
-  📦 Dergo Setin
+  📦 Dergo Porosin
 </button>
 
 <div id="sendOptions" class="btnRow hidden">
@@ -226,6 +249,8 @@ h2 { margin-bottom: 10px; }
 
 <div class="smallText">
   Sa kushton Sistemi i Kamerave? Llogarite tani ...
+</div>
+
 </div>
 
 <script>
@@ -288,7 +313,6 @@ function showSendOptions(){
   document.getElementById("sendBtn").style.display = "none";
   document.getElementById("sendOptions").classList.remove("hidden");
 
-  // 👉 bëhen menjëherë jeshile
   document.querySelector(".whatsappBtn").classList.add("active");
   document.querySelector(".smsBtn").classList.add("active");
 }
