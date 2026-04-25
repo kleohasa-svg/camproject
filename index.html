@@ -17,6 +17,7 @@ body {
 
 h2 { margin-bottom: 10px; }
 
+/* CATEGORY */
 .category {
   display: flex;
   gap: 10px;
@@ -25,11 +26,11 @@ h2 { margin-bottom: 10px; }
 
 .category button {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   border: none;
   background: #1e293b;
   color: white;
-  border-radius: 8px;
+  border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -38,20 +39,19 @@ h2 { margin-bottom: 10px; }
   background: #2563eb;
 }
 
+/* CARD */
 .card {
   background: #1e293b;
-  border-radius: 12px;
+  border-radius: 14px;
   overflow: hidden;
   border: 1px solid #334155;
 }
 
 .card img {
   width: 100%;
-  height: auto;
   aspect-ratio: 4 / 3;
   object-fit: cover;
   display: block;
-  background: #0f172a;
 }
 
 @media (max-width: 600px) {
@@ -60,7 +60,6 @@ h2 { margin-bottom: 10px; }
   }
 }
 
-/* TITLE + PRICE IN ONE LINE */
 .infoRow {
   margin-top: 10px;
   padding: 0 10px;
@@ -68,7 +67,7 @@ h2 { margin-bottom: 10px; }
   font-weight: bold;
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -76,10 +75,10 @@ h2 { margin-bottom: 10px; }
 .price {
   color: #22c55e;
   font-size: 18px;
-  font-weight: bold;
 }
 
-.nav {
+/* NAV */
+.nav, .btnRow {
   display: flex;
   gap: 10px;
   margin-top: 10px;
@@ -87,53 +86,99 @@ h2 { margin-bottom: 10px; }
 
 .nav button {
   flex: 1;
-  padding: 12px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  font-size: 13px;
+  height: 40px;
   background: #334155;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
 }
 
-/* ORDER BUTTONS */
-.btnRow {
-  display: flex;
-  gap: 10px;
+/* SEND BUTTON */
+.sendBtn {
+  width: 100%;
   margin-top: 10px;
-}
-
-.smallBtn {
-  flex: 1;
-  padding: 10px;
   border: none;
-  border-radius: 8px;
-  font-size: 14px;
+  border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   color: white;
-}
-
-.whatsappBtn {
-  background: #16a34a;
-}
-
-.smsBtn {
+  font-size: 14px;
+  height: 45px;
   background: #2563eb;
 }
 
-/* PERSONALIZE */
+/* HIDDEN */
+.hidden {
+  display: none;
+}
+
+/* WHATSAPP + SMS */
+.whatsappBtn,
+.smsBtn {
+  flex: 1;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+  font-size: 13px;
+  height: 40px;
+  background: #334155;
+  transition: 0.2s;
+}
+
+.whatsappBtn.active,
+.smsBtn.active {
+  background: #16a34a;
+}
+
+/* PERSONALIZO PREMIUM */
 .customBtn {
   margin-top: 10px;
   width: 100%;
   padding: 14px;
-  background: #f59e0b;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 700;
   cursor: pointer;
-  color: black;
+  color: #111;
+
+  background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
+
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.customBtn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
+}
+
+.customBtn:active {
+  transform: translateY(0px) scale(0.99);
+  box-shadow: 0 8px 18px rgba(245, 158, 11, 0.3);
+}
+
+.customBtn::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -60%;
+  width: 40%;
+  height: 200%;
+  background: rgba(255,255,255,0.25);
+  transform: rotate(25deg);
+  transition: all 0.6s ease;
+}
+
+.customBtn:hover::after {
+  left: 120%;
 }
 
 .smallText {
@@ -149,13 +194,12 @@ h2 { margin-bottom: 10px; }
 <h2>Zgjidh Paketën</h2>
 
 <div class="category">
-  <button onclick="setCategory('5mp')" id="btn5">SET 5MP</button>
-  <button onclick="setCategory('8mp')" id="btn8">SET 8MP</button>
+  <button onclick="setCategory('5mp')" id="btn5">SETET 5MP</button>
+  <button onclick="setCategory('8mp')" id="btn8">SETET 8MP</button>
 </div>
 
 <div class="card">
   <img id="img">
-
   <div class="infoRow">
     <div id="title"></div>
     <div id="price" class="price"></div>
@@ -163,17 +207,21 @@ h2 { margin-bottom: 10px; }
 </div>
 
 <div class="nav">
-  <button onclick="prev()">⬅️ Mbrapa</button>
-  <button onclick="next()">➡️ Next</button>
+  <button onclick="prev()">⬅️ Previous</button>
+  <button onclick="next()">Next ➡️</button>
 </div>
 
-<div class="btnRow">
-  <button class="smallBtn whatsappBtn" onclick="orderWhatsApp()">WhatsApp</button>
-  <button class="smallBtn smsBtn" onclick="orderSMS()">SMS</button>
+<button id="sendBtn" class="sendBtn" onclick="showSendOptions()">
+  📦 Dergo Setin
+</button>
+
+<div id="sendOptions" class="btnRow hidden">
+  <button class="whatsappBtn" onclick="orderWhatsApp()">WhatsApp</button>
+  <button class="smsBtn" onclick="orderSMS()">SMS</button>
 </div>
 
 <a href="https://www.kamerasigurie.com/personalizo.html" style="text-decoration:none;">
-  <button class="customBtn">Personalizo Oferten</button>
+  <button class="customBtn">⚙️ Personalizo Oferten</button>
 </a>
 
 <div class="smallText">
@@ -193,7 +241,6 @@ const data = {
     {img:"https://i.ibb.co/v61knZ2C/7cop.png", name:"Set 7 Kamera 5MP", price:"€680"},
     {img:"https://i.ibb.co/JFQTbLk9/8cop.png", name:"Set 8 Kamera 5MP", price:"€790"}
   ],
-
   "8mp": [
     {img:"https://i.ibb.co/Y4gmhbjV/4K-2cam.png", name:"Set 2 Kamera 8MP", price:"€430"},
     {img:"https://i.ibb.co/tPC6GNVb/4K-3cam.png", name:"Set 3 Kamera 8MP", price:"€490"},
@@ -206,60 +253,64 @@ const data = {
 };
 
 let category = "5mp";
-let index = 0;
-
-function setCategory(cat){
-  category = cat;
-  index = 0;
-
-  document.getElementById("btn5").classList.remove("active");
-  document.getElementById("btn8").classList.remove("active");
-  document.getElementById(cat==="5mp"?"btn5":"btn8").classList.add("active");
-
-  render();
-}
+let indexMap = { "5mp": 2, "8mp": 2 };
 
 function render(){
-  let item = data[category][index];
+  let item = data[category][indexMap[category]];
   document.getElementById("img").src = item.img;
-  document.getElementById("title").innerText = item.name;
+  document.getElementById("title").innerText = item.name.replace("Set", "Seti me");
   document.getElementById("price").innerText = item.price;
 }
 
+function setCategory(cat){
+  category = cat;
+  document.getElementById("btn5").classList.remove("active");
+  document.getElementById("btn8").classList.remove("active");
+  document.getElementById(cat==="5mp"?"btn5":"btn8").classList.add("active");
+  render();
+}
+
 function next(){
-  if(index < data[category].length-1){
-    index++;
+  if(indexMap[category] < data[category].length - 1){
+    indexMap[category]++;
     render();
   }
 }
 
 function prev(){
-  if(index > 0){
-    index--;
+  if(indexMap[category] > 0){
+    indexMap[category]--;
     render();
   }
 }
 
+function showSendOptions(){
+  document.getElementById("sendBtn").style.display = "none";
+  document.getElementById("sendOptions").classList.remove("hidden");
+
+  // 👉 bëhen menjëherë jeshile
+  document.querySelector(".whatsappBtn").classList.add("active");
+  document.querySelector(".smsBtn").classList.add("active");
+}
+
 function buildMessage(item){
-  return `Kerkese oferte
+  return `Jam i interesuar per setin ne oferte:
 
-Produkti: ${item.name}
+Produkti: ${item.name.replace("Set", "Seti me")}
 Cmimi: ${item.price}
-Linku i fotos: ${item.img}
 
-Jam i interesuar per setin ne oferte.`;
+Linku i fotos:
+${item.img}`;
 }
 
 function orderWhatsApp(){
-  let item = data[category][index];
-  let msg = buildMessage(item);
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(msg)}`, "_blank");
+  let item = data[category][indexMap[category]];
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(buildMessage(item))}`, "_blank");
 }
 
 function orderSMS(){
-  let item = data[category][index];
-  let msg = buildMessage(item);
-  window.open(`sms:+${phone}?body=${encodeURIComponent(msg)}`);
+  let item = data[category][indexMap[category]];
+  window.open(`sms:+${phone}?body=${encodeURIComponent(buildMessage(item))}`);
 }
 
 setCategory("5mp");
