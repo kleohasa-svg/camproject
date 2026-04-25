@@ -26,30 +26,16 @@ body {
   text-align: center;
 }
 
-/* CONTAINER */
-.container {
-  width: 100%;
-}
+.container { width: 100%; }
 
-/* DESKTOP VERSION */
 @media (min-width: 900px) {
-  body {
-    display: flex;
-    justify-content: center;
-  }
-
-  .container {
-    max-width: 620px;
-  }
-
-  .card img {
-    max-height: 380px;
-  }
+  body { display: flex; justify-content: center; }
+  .container { max-width: 620px; }
+  .card img { max-height: 380px; }
 }
 
 h2 { margin-bottom: 10px; }
 
-/* CATEGORY */
 .category {
   display: flex;
   gap: 10px;
@@ -67,11 +53,8 @@ h2 { margin-bottom: 10px; }
   cursor: pointer;
 }
 
-.category button.active {
-  background: #2563eb;
-}
+.category button.active { background: #2563eb; }
 
-/* CARD */
 .card {
   background: #1e293b;
   border-radius: 14px;
@@ -83,34 +66,21 @@ h2 { margin-bottom: 10px; }
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
-  display: block;
 }
 
 @media (max-width: 600px) {
-  .card img {
-    aspect-ratio: 1 / 1;
-  }
+  .card img { aspect-ratio: 1 / 1; }
 }
 
 .infoRow {
   margin-top: 10px;
-  padding: 0 10px;
   font-size: 16px;
   font-weight: bold;
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
 }
 
-.price {
-  color: #22c55e;
-  font-size: 18px;
-}
+.price { color: #22c55e; font-size: 18px; }
 
-/* NAV */
-.nav, .btnRow {
+.nav {
   display: flex;
   gap: 10px;
   margin-top: 10px;
@@ -123,12 +93,10 @@ h2 { margin-bottom: 10px; }
   font-weight: bold;
   cursor: pointer;
   color: white;
-  font-size: 13px;
   height: 40px;
   background: #334155;
 }
 
-/* SEND BUTTON */
 .sendBtn {
   width: 100%;
   margin-top: 10px;
@@ -137,86 +105,36 @@ h2 { margin-bottom: 10px; }
   font-weight: bold;
   cursor: pointer;
   color: white;
-  font-size: 14px;
   height: 45px;
   background: #2563eb;
 }
 
-/* HIDDEN */
-.hidden {
-  display: none;
-}
+.hidden { display: none; }
 
-/* WHATSAPP + SMS */
-.whatsappBtn,
-.smsBtn {
+.whatsappBtn, .smsBtn {
   flex: 1;
   border: none;
   border-radius: 12px;
   font-weight: bold;
   cursor: pointer;
   color: white;
-  font-size: 13px;
   height: 40px;
   background: #334155;
-  transition: 0.2s;
 }
 
-.whatsappBtn.active,
-.smsBtn.active {
+.whatsappBtn.active, .smsBtn.active {
   background: #16a34a;
 }
 
-/* PERSONALIZO PREMIUM */
 .customBtn {
   margin-top: 10px;
   width: 100%;
   padding: 14px;
   border: none;
   border-radius: 12px;
-  font-size: 16px;
   font-weight: 700;
   cursor: pointer;
-  color: #111;
-
-  background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
-  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.35);
-
-  transition: all 0.25s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.customBtn:hover {
-  transform: translateY(-2px) scale(1.01);
-  box-shadow: 0 15px 35px rgba(245, 158, 11, 0.5);
-}
-
-.customBtn:active {
-  transform: translateY(0px) scale(0.99);
-  box-shadow: 0 8px 18px rgba(245, 158, 11, 0.3);
-}
-
-.customBtn::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 40%;
-  height: 200%;
-  background: rgba(255,255,255,0.25);
-  transform: rotate(25deg);
-  transition: all 0.6s ease;
-}
-
-.customBtn:hover::after {
-  left: 120%;
-}
-
-.smallText {
-  font-size: 12px;
-  margin-top: 6px;
-  color: #cbd5e1;
+  background: linear-gradient(135deg,#fbbf24,#f97316);
 }
 </style>
 </head>
@@ -245,22 +163,18 @@ h2 { margin-bottom: 10px; }
   <button onclick="next()">Next ➡️</button>
 </div>
 
-<button id="sendBtn" class="sendBtn" onclick="showSendOptions()">
-  📦 Dergo Porosin
+<button class="sendBtn" id="sendBtn" onclick="showSendOptions()">
+📦 Dergo Porosin
 </button>
 
-<div id="sendOptions" class="btnRow hidden">
+<div id="sendOptions" class="hidden" style="display:flex;gap:10px;margin-top:10px;">
   <button class="whatsappBtn" onclick="orderWhatsApp()">WhatsApp</button>
   <button class="smsBtn" onclick="orderSMS()">SMS</button>
 </div>
 
-<a href="https://www.kamerasigurie.com/personalizo.html" style="text-decoration:none;">
+<a href="https://www.kamerasigurie.com/personalizo.html">
   <button class="customBtn">⚙️ Personalizo Oferten</button>
 </a>
-
-<div class="smallText">
-  Sa kushton Sistemi i Kamerave? Llogarite tani ...
-</div>
 
 </div>
 
@@ -288,67 +202,67 @@ const data = {
   ]
 };
 
-let category = "5mp";
-let indexMap = { "5mp": 2, "8mp": 2 };
+let category="5mp";
+let indexMap={"5mp":2,"8mp":2};
 
 function render(){
-  let item = data[category][indexMap[category]];
-  document.getElementById("img").src = item.img;
-  document.getElementById("title").innerText = item.name.replace("Set", "Seti me");
-  document.getElementById("price").innerText = item.price;
+  let item=data[category][indexMap[category]];
+  img.src=item.img;
+  title.innerText=item.name;
+  price.innerText=item.price;
 }
 
-function setCategory(cat){
-  category = cat;
-  document.getElementById("btn5").classList.remove("active");
-  document.getElementById("btn8").classList.remove("active");
-  document.getElementById(cat==="5mp"?"btn5":"btn8").classList.add("active");
+function setCategory(c){
+  category=c;
   render();
 }
 
 function next(){
-  if(indexMap[category] < data[category].length - 1){
+  if(indexMap[category]<data[category].length-1){
     indexMap[category]++;
     render();
   }
 }
 
 function prev(){
-  if(indexMap[category] > 0){
+  if(indexMap[category]>0){
     indexMap[category]--;
     render();
   }
 }
 
 function showSendOptions(){
-  document.getElementById("sendBtn").style.display = "none";
-  document.getElementById("sendOptions").classList.remove("hidden");
-
-  document.querySelector(".whatsappBtn").classList.add("active");
-  document.querySelector(".smsBtn").classList.add("active");
+  sendBtn.style.display="none";
+  sendOptions.classList.remove("hidden");
 }
 
 function buildMessage(item){
-  return `Jam i interesuar per setin ne oferte:
-
-Produkti: ${item.name.replace("Set", "Seti me")}
-Cmimi: ${item.price}
-
-Linku i fotos:
-${item.img}`;
+  return `Produkti: ${item.name}\nCmimi: ${item.price}`;
 }
 
 function orderWhatsApp(){
-  let item = data[category][indexMap[category]];
-  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(buildMessage(item))}`, "_blank");
+  let item=data[category][indexMap[category]];
+
+  gtag('event','conversion',{
+    'send_to':'AW-18082508257/ghHACLXY7Z0cEOHbtK5D',
+    'transaction_id':Date.now().toString()
+  });
+
+  window.open(`https://wa.me/${phone}?text=${encodeURIComponent(buildMessage(item))}`,"_blank");
 }
 
 function orderSMS(){
-  let item = data[category][indexMap[category]];
+  let item=data[category][indexMap[category]];
+
+  gtag('event','conversion',{
+    'send_to':'AW-18082508257/ghHACLXY7Z0cEOHbtK5D',
+    'transaction_id':Date.now().toString()
+  });
+
   window.open(`sms:+${phone}?body=${encodeURIComponent(buildMessage(item))}`);
 }
 
-setCategory("5mp");
+render();
 </script>
 
 </body>
